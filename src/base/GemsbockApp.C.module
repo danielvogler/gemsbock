@@ -1,0 +1,47 @@
+#include "GemsbockApp.h"
+#include "Moose.h"
+#include "AppFactory.h"
+#include "MooseSyntax.h"
+
+template<>
+InputParameters validParams<GemsbockApp>()
+{
+  InputParameters params = validParams<MooseApp>();
+  return params;
+}
+
+GemsbockApp::GemsbockApp(InputParameters parameters) :
+    MooseApp(parameters)
+{
+  Moose::registerObjects(_factory);
+  GemsbockApp::registerObjects(_factory);
+
+  Moose::associateSyntax(_syntax, _action_factory);
+  GemsbockApp::associateSyntax(_syntax, _action_factory);
+}
+
+GemsbockApp::~GemsbockApp()
+{
+}
+
+// External entry point for dynamic application loading
+extern "C" void GemsbockApp__registerApps() { GemsbockApp::registerApps(); }
+void
+GemsbockApp::registerApps()
+{
+  registerApp(GemsbockApp);
+}
+
+// External entry point for dynamic object registration
+extern "C" void GemsbockApp__registerObjects(Factory & factory) { GemsbockApp::registerObjects(factory); }
+void
+GemsbockApp::registerObjects(Factory & /*factory*/)
+{
+}
+
+// External entry point for dynamic syntax association
+extern "C" void GemsbockApp__associateSyntax(Syntax & syntax, ActionFactory & action_factory) { GemsbockApp::associateSyntax(syntax, action_factory); }
+void
+GemsbockApp::associateSyntax(Syntax & /*syntax*/, ActionFactory & /*action_factory*/)
+{
+}
